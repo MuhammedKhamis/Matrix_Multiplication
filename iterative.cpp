@@ -74,5 +74,5 @@ main(int argc , char *argv[]){
     printf("Seconds taken %lu\n", stop.tv_sec - start.tv_sec);
     printf("-----------------------------------------------------\n");
 
-	print_mat(res);
+	//print_mat(res);
 }
