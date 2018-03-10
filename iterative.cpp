@@ -4,19 +4,20 @@
 using namespace std;
 
 
-vector<vector<int> >
-multiply(vector<vector<int> > a , vector<vector<int> > b){
-	vector<vector<int> > c;
-	
-	int wid = b[0].size();
 
-	int hig = a.size();
+vector<vector<long long> >
+multiply(vector<vector<long long> > a , vector<vector<long long> > b){
+	vector<vector<long long> > c;
 	
-	for(int i = 0 ; i < hig; i++){
-		vector<int> row;
-		for(int j = 0 ; j < wid ; j++){
-			int elem = 0;
-			for(int k = 0 ; k < a[i].size() ; k++){
+	long long wid = b[0].size();
+
+	long long hig = a.size();
+	
+	for(long long i = 0 ; i < hig; i++){
+		vector<long long> row;
+		for(long long j = 0 ; j < wid ; j++){
+			long long elem = 0;
+			for(long long k = 0 ; k < a[i].size() ; k++){
 				elem += a[i][k]*b[k][j]; 
 			}
 			row.push_back(elem);
@@ -28,10 +29,10 @@ multiply(vector<vector<int> > a , vector<vector<int> > b){
 }
 
 void
-print_mat(vector<vector<int> > mat){
+print_mat(vector<vector<long long> > mat){
 
-	for(int i = 0 ; i < mat.size() ; i++){
-		for (int j = 0; j < mat[i].size() ; j++){
+	for(long long i = 0 ; i < mat.size() ; i++){
+		for (long long j = 0; j < mat[i].size() ; j++){
 			cout << mat[i][j] << " ";
 		}
 		cout << endl;
@@ -41,17 +42,17 @@ print_mat(vector<vector<int> > mat){
 int
 main(int argc , char *argv[]){
 
-	int n;
+	long long n;
 	freopen(argv[1],"r",stdin);
 
 	cin >> n;
-	vector<vector<int> > mat;
+	vector<vector<long long> > mat;
 
 
-	for(int i = 0 ; i < n ; i++){
-		vector<int> row;
-		int elem;
-		for(int j = 0 ; j < n ; j++){
+	for(long long i = 0 ; i < n ; i++){
+		vector<long long> row;
+		long long elem;
+		for(long long j = 0 ; j < n ; j++){
 			cin >> elem;
 			row.push_back(elem);
 		}
@@ -65,7 +66,7 @@ main(int argc , char *argv[]){
 	// calc time
 	gettimeofday(&start, NULL); //start checking time
 
-	vector<vector<int> > res = multiply(mat,mat);
+	vector<vector<long long> > res = multiply(mat,mat);
 
 	gettimeofday(&stop, NULL); //start checking time
 	//  end calc time
@@ -74,5 +75,5 @@ main(int argc , char *argv[]){
     printf("Seconds taken %lu\n", stop.tv_sec - start.tv_sec);
     printf("-----------------------------------------------------\n");
 
-	print_mat(res);
+	//print_mat(res);
 }

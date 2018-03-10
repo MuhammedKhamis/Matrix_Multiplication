@@ -5,15 +5,15 @@ using namespace std;
 
 
 void
-multiply(vector<vector<int> > a, vector<vector<int> > b, vector<vector<int> > &c){
+multiply(vector<vector<long long> > a, vector<vector<long long> > b, vector<vector<long long> > &c){
 	
-	int wid = 2;
+	long long wid = 2;
 
-	int hig = 2;
+	long long hig = 2;
 	
-	for(int i = 0 ; i < hig; i++){
-		for(int j = 0 ; j < wid ; j++){
-			for(int k = 0 ; k < wid ; k++){
+	for(long long i = 0 ; i < hig; i++){
+		for(long long j = 0 ; j < wid ; j++){
+			for(long long k = 0 ; k < wid ; k++){
 				c[i][j] += a[i][k]*b[k][j]; 
 			}
 		}	
@@ -22,30 +22,30 @@ multiply(vector<vector<int> > a, vector<vector<int> > b, vector<vector<int> > &c
 }
 
 void
-add(vector<vector<int> > a, vector<vector<int> > b, vector<vector<int> > &c){
+add(vector<vector<long long> > a, vector<vector<long long> > b, vector<vector<long long> > &c){
 
-	for(int i = 0 ; i < a.size() ; i++){
-		for(int j = 0 ; j < a[i].size() ; j++){
+	for(long long i = 0 ; i < a.size() ; i++){
+		for(long long j = 0 ; j < a[i].size() ; j++){
 			c[i][j] = a[i][j]+b[i][j];
 		}
 	}
 }
 
 void
-subtract(vector<vector<int> > a, vector<vector<int> > b, vector<vector<int> > &c){
+subtract(vector<vector<long long> > a, vector<vector<long long> > b, vector<vector<long long> > &c){
 
-	for(int i = 0 ; i < a.size() ; i++){
-		for(int j = 0 ; j < a[i].size() ; j++){
+	for(long long i = 0 ; i < a.size() ; i++){
+		for(long long j = 0 ; j < a[i].size() ; j++){
 			c[i][j] = a[i][j]-b[i][j];
 		}
 	}
 }
 
 void
-print_mat(vector<vector<int> > mat){
+print_mat(vector<vector<long long> > mat){
 
-	for(int i = 0 ; i < mat.size() ; i++){
-		for (int j = 0; j < mat[i].size() ; j++){
+	for(long long i = 0 ; i < mat.size() ; i++){
+		for (long long j = 0; j < mat[i].size() ; j++){
 			cout << mat[i][j] << " ";
 		}
 		cout << endl;
@@ -53,15 +53,15 @@ print_mat(vector<vector<int> > mat){
 }
 
 void
-dvide_conqure(int size, vector<vector<int> > a, vector<vector<int> > b , vector<vector<int> > &c){
+dvide_conqure(long long size, vector<vector<long long> > a, vector<vector<long long> > b , vector<vector<long long> > &c){
 
 	if(size == 2){
 		multiply(a,b,c);
 		return;
 	}
-	int new_size = size/2;
-	vector<int> inner (new_size);
-	vector< vector<int > > a11(new_size,inner),
+	long long new_size = size/2;
+	vector<long long> inner (new_size);
+	vector< vector<long long > > a11(new_size,inner),
 	a12(new_size,inner),a21(new_size,inner),a22(new_size,inner),
 	b11(new_size,inner),b12(new_size,inner),b21(new_size,inner),
 	b22(new_size,inner),p1(new_size,inner),p2(new_size,inner),
@@ -69,8 +69,8 @@ dvide_conqure(int size, vector<vector<int> > a, vector<vector<int> > b , vector<
 	p6(new_size,inner),p7(new_size,inner),temp_left(new_size,inner),
 	temp_right(new_size,inner);
 
-	for(int i = 0 ; i < new_size ; i++){
-		for(int j = 0 ; j < new_size ; j++){
+	for(long long i = 0 ; i < new_size ; i++){
+		for(long long j = 0 ; j < new_size ; j++){
 
                 a11[i][j] = a[i][j];
                 a12[i][j] = a[i][j + new_size];
@@ -115,7 +115,7 @@ dvide_conqure(int size, vector<vector<int> > a, vector<vector<int> > b , vector<
 	 add(b11,b12,temp_right);
 	 dvide_conqure(new_size,temp_left,temp_right,p7);
 
-	vector<vector<int> > m1(new_size,inner),m2(new_size,inner),
+	vector<vector<long long> > m1(new_size,inner),m2(new_size,inner),
 	m3(new_size,inner),m4(new_size,inner);
 
 	
@@ -136,8 +136,8 @@ dvide_conqure(int size, vector<vector<int> > a, vector<vector<int> > b , vector<
 	subtract(temp_right,p7,m4);
 	 
 
-	for(int i = 0 ; i < size/2 ; i++){
-		for(int j = 0 ; j < size/2 ; j++){
+	for(long long i = 0 ; i < size/2 ; i++){
+		for(long long j = 0 ; j < size/2 ; j++){
 			c[i][j] = m1[i][j];
 			c[i][j+size/2] = m2[i][j];
 			c[i+size/2][j] = m3[i][j];
@@ -150,15 +150,15 @@ dvide_conqure(int size, vector<vector<int> > a, vector<vector<int> > b , vector<
 int
 main(int argc , char *argv[]){
 
-	int n;
+	long long n;
 	freopen(argv[1],"r",stdin);
 
 	cin >> n;
-	vector<vector<int> > mat(n, vector<int> (n));
+	vector<vector<long long> > mat(n, vector<long long> (n));
 
 
-	for(int i = 0 ; i < n ; i++){
-		for(int j = 0 ; j < n ; j++){
+	for(long long i = 0 ; i < n ; i++){
+		for(long long j = 0 ; j < n ; j++){
 			cin >> mat[i][j];
 		}
 
@@ -168,7 +168,7 @@ main(int argc , char *argv[]){
 
 	struct timeval start,stop ; 
 
-	vector<vector<int> > res(n,vector<int> (n));
+	vector<vector<long long> > res(n,vector<long long> (n));
 
 	// calc time
 	gettimeofday(&start, NULL); //start checking time
@@ -183,5 +183,5 @@ main(int argc , char *argv[]){
     printf("Seconds taken %lu\n", stop.tv_sec - start.tv_sec);
     printf("-----------------------------------------------------\n");
 
-	print_mat(res);
+	//print_mat(res);
 }
