@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#define SIZE 128
+#define SIZE 4
 using namespace std;
 
 int

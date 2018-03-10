@@ -4,56 +4,43 @@
 using namespace std;
 
 
-vector<vector<int> >
-multiply(vector<vector<int> > a , vector<vector<int> > b){
-	vector<vector<int> > c;
+void
+multiply(vector<vector<int> > a, vector<vector<int> > b, vector<vector<int> > &c){
 	
 	int wid = 2;
 
 	int hig = 2;
 	
 	for(int i = 0 ; i < hig; i++){
-		vector<int> row;
 		for(int j = 0 ; j < wid ; j++){
-			int elem = 0;
-			for(int k = 0 ; k < a[i].size() ; k++){
-				elem += a[i][k]*b[k][j]; 
+			for(int k = 0 ; k < wid ; k++){
+				c[i][j] += a[i][k]*b[k][j]; 
 			}
-			row.push_back(elem);
-		}
-		c.push_back(row);
+		}	
 	}
 
-	return c;
 }
 
-vector<vector<int> >
-add(vector<vector<int> > a, vector<vector<int> > b){
-	vector<vector<int> > c;
+void
+add(vector<vector<int> > a, vector<vector<int> > b, vector<vector<int> > &c){
 
 	for(int i = 0 ; i < a.size() ; i++){
-		vector<int> row;
 		for(int j = 0 ; j < a[i].size() ; j++){
-			row.push_back(a[i][j]+b[i][j]);
+			c[i][j] = a[i][j]+b[i][j];
 		}
-		c.push_back(row);
 	}
-	return c;
 }
 
-vector<vector<int> >
-subtract(vector<vector<int> > a, vector<vector<int> > b){
-	vector<vector<int> > c;
+void
+subtract(vector<vector<int> > a, vector<vector<int> > b, vector<vector<int> > &c){
 
 	for(int i = 0 ; i < a.size() ; i++){
-		vector<int> row;
 		for(int j = 0 ; j < a[i].size() ; j++){
-			row.push_back(a[i][j]-b[i][j]);
+			c[i][j] = a[i][j]-b[i][j];
 		}
-		c.push_back(row);
 	}
-	return c;
 }
+
 void
 print_mat(vector<vector<int> > mat){
 
@@ -65,59 +52,89 @@ print_mat(vector<vector<int> > mat){
 	}
 }
 
-vector<vector<int> >
-dvide_conqure(int size, vector<vector<int> > a, vector<vector<int> > b){
-	vector<vector<int> > c;
+void
+dvide_conqure(int size, vector<vector<int> > a, vector<vector<int> > b , vector<vector<int> > &c){
 
 	if(size == 2){
-		return multiply(a,b);
+		multiply(a,b,c);
+		return;
 	}
-	vector<vector<int > > a11,a12,a21,a22,b11,b12,b21,b22;
+	int new_size = size/2;
+	vector<int> inner (new_size);
+	vector< vector<int > > a11(new_size,inner),
+	a12(new_size,inner),a21(new_size,inner),a22(new_size,inner),
+	b11(new_size,inner),b12(new_size,inner),b21(new_size,inner),
+	b22(new_size,inner),p1(new_size,inner),p2(new_size,inner),
+	p3(new_size,inner),p4(new_size,inner),p5(new_size,inner),
+	p6(new_size,inner),p7(new_size,inner),temp_left(new_size,inner),
+	temp_right(new_size,inner);
 
-	for(int i = 0 ; i < size/2 ; i++){
-		vector<int> row_a1,row_a2,row_a3,row_a4,row_b1,row_b2,row_b3,row_b4;
-		for(int j = 0 ; j < size/2 ; j++){
-			row_a1.push_back(a[i][j]);
-			row_a2.push_back(a[i][j+size/2]);
-			row_a3.push_back(a[i+size/2][j]);
-			row_a4.push_back(a[i+size/2][j+size/2]);
+	for(int i = 0 ; i < new_size ; i++){
+		for(int j = 0 ; j < new_size ; j++){
 
-			row_b1.push_back(b[i][j]);
-			row_b2.push_back(b[i][j+size/2]);
-			row_b3.push_back(b[i+size/2][j]);
-			row_b4.push_back(b[i+size/2][j+size/2]);
+                a11[i][j] = a[i][j];
+                a12[i][j] = a[i][j + new_size];
+                a21[i][j] = a[i + new_size][j];
+                a22[i][j] = a[i + new_size][j + new_size];
+
+                b11[i][j] = b[i][j];
+                b12[i][j] = b[i][j + new_size];
+                b21[i][j] = b[i + new_size][j];
+                b22[i][j] = b[i + new_size][j + new_size];
 		}
-		a11.push_back(row_a1);
-		a12.push_back(row_a2);
-		a21.push_back(row_a3);
-		a22.push_back(row_a4);
-
-		b11.push_back(row_b1);
-		b12.push_back(row_b2);
-		b21.push_back(row_b3);
-		b22.push_back(row_b4);
 	}
 
-	vector<vector<int> > p1,p2,p3,p4,p5,p6,p7;
+	 // p1 = a*(f-h)
+	 subtract(b12,b22,temp_right);
+	 dvide_conqure(new_size,a11,temp_right,p1);
+	 
+	 // p2 = (a+b)h
+	 add(a11,a12,temp_left);
+	 dvide_conqure(new_size,temp_left,b22,p2);
+	 
+	 // p3 = (c+d)e
+	 add(a21,a22,temp_left);
+	 dvide_conqure(new_size,temp_left,b11,p3);
+	 
+	 // p4 = d(g-e)
+	 subtract(b21,b11,temp_right);
+	 dvide_conqure(new_size,a22,temp_right,p4);
 
-	p1 = dvide_conqure(size/2,a11,subtract(b12,b22));
-	p2 = dvide_conqure(size/2,add(a11,a12),b22);
-	p3 = dvide_conqure(size/2,add(a21,a22),b11);
-	p4 = dvide_conqure(size/2,a22,subtract(b21,b11));
-	p5 = dvide_conqure(size/2,add(a11,a22),add(b11,b22));
-	p6 = dvide_conqure(size/2,subtract(a12,a22),add(b21,b22));
-	p7 = dvide_conqure(size/2,subtract(a11,a21),add(b11,b12));
+	 // p5 = (a+d)(e+h)
+	 add(a11,a22,temp_left);
+	 add(b11,b22,temp_right);
+	 dvide_conqure(new_size,temp_left,temp_right,p5);
 
-	for(int i = 0 ; i < size ; i++){
-		c.push_back(vector<int>());
-		c[c.size()-1].resize(size);
-	}
-	vector<vector<int> > m1,m2,m3,m4;
+	 // p6 = (b-d)(g+h)
+	 subtract(a12,a22,temp_left);
+	 add(b21,b22,temp_right);
+	 dvide_conqure(new_size,temp_left,temp_right,p6);
+	 
+	 // p7 = (a-c)(e+f)
+	 subtract(a11,a21,temp_left);
+	 add(b11,b12,temp_right);
+	 dvide_conqure(new_size,temp_left,temp_right,p7);
 
-	m1 = add(subtract(add(p5,p4),p2),p6);
-	m2 = add(p1,p2);
-	m3 = add(p3,p4);
-	m4 = subtract(subtract(add(p1,p5),p3),p7);
+	vector<vector<int> > m1(new_size,inner),m2(new_size,inner),
+	m3(new_size,inner),m4(new_size,inner);
+
+	
+	// m1 = p5+p4-p2+p6
+	add(p5,p4,temp_left);
+	subtract(temp_left,p2,temp_right);
+	add(temp_right,p6,m1);
+
+	// m2 = p1+p2
+	add(p1,p2,m2);
+	
+	//m3 = p3+p4
+	add(p3,p4,m3);
+
+	//m4 = p1+p5-p3-p7
+	add(p1,p5,temp_left);
+	subtract(temp_left,p3,temp_right);
+	subtract(temp_right,p7,m4);
+	 
 
 	for(int i = 0 ; i < size/2 ; i++){
 		for(int j = 0 ; j < size/2 ; j++){
@@ -127,7 +144,6 @@ dvide_conqure(int size, vector<vector<int> > a, vector<vector<int> > b){
 			c[i+size/2][j+size/2] = m4[i][j];
 		}
 	}
-	return c;
 }
 
 
@@ -138,27 +154,26 @@ main(int argc , char *argv[]){
 	freopen(argv[1],"r",stdin);
 
 	cin >> n;
-	vector<vector<int> > mat;
+	vector<vector<int> > mat(n, vector<int> (n));
 
 
 	for(int i = 0 ; i < n ; i++){
-		vector<int> row;
-		int elem;
 		for(int j = 0 ; j < n ; j++){
-			cin >> elem;
-			row.push_back(elem);
+			cin >> mat[i][j];
 		}
-		mat.push_back(row);
+
 
 	}
 	fclose(stdin);
 
 	struct timeval start,stop ; 
 
+	vector<vector<int> > res(n,vector<int> (n));
+
 	// calc time
 	gettimeofday(&start, NULL); //start checking time
 
-	vector<vector<int> > res = dvide_conqure(mat.size(),mat,mat);
+	dvide_conqure(n,mat,mat,res);
 
 	gettimeofday(&stop, NULL); //start checking time
 	//  end calc time
@@ -168,5 +183,5 @@ main(int argc , char *argv[]){
     printf("Seconds taken %lu\n", stop.tv_sec - start.tv_sec);
     printf("-----------------------------------------------------\n");
 
-	//print_mat(res);
+	print_mat(res);
 }
