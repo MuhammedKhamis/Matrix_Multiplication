@@ -43,37 +43,44 @@ int
 main(int argc , char *argv[]){
 
 	long long n;
-	freopen(argv[1],"r",stdin);
 
-	cin >> n;
-	vector<vector<long long> > mat;
+	
+	for(int k = 1 ; k < argc ; k++){
+
+		freopen(argv[k],"r",stdin);
+
+		cin >> n;
+		
+		vector<vector<long long> > mat;
 
 
-	for(long long i = 0 ; i < n ; i++){
-		vector<long long> row;
-		long long elem;
-		for(long long j = 0 ; j < n ; j++){
-			cin >> elem;
-			row.push_back(elem);
+		for(long long i = 0 ; i < n ; i++){
+			vector<long long> row;
+			long long elem;
+			for(long long j = 0 ; j < n ; j++){
+				cin >> elem;
+				row.push_back(elem);
+			}
+			mat.push_back(row);
+
 		}
-		mat.push_back(row);
 
+		fclose(stdin);
+
+
+		struct timeval start,stop ; 
+
+		// calc time
+		gettimeofday(&start, NULL); //start checking time
+
+		vector<vector<long long> > res = multiply(mat,mat);
+
+		gettimeofday(&stop, NULL); //start checking time
+		//  end calc time
+
+		printf("Microseconds taken: %lu\n", stop.tv_usec - start.tv_usec);
+	    printf("Seconds taken %lu\n", stop.tv_sec - start.tv_sec);
+	    printf("-----------------------------------------------------\n");
 	}
-	fclose(stdin);
-
-	struct timeval start,stop ; 
-
-	// calc time
-	gettimeofday(&start, NULL); //start checking time
-
-	vector<vector<long long> > res = multiply(mat,mat);
-
-	gettimeofday(&stop, NULL); //start checking time
-	//  end calc time
-
-	printf("Microseconds taken: %lu\n", stop.tv_usec - start.tv_usec);
-    printf("Seconds taken %lu\n", stop.tv_sec - start.tv_sec);
-    printf("-----------------------------------------------------\n");
-
 	//print_mat(res);
 }

@@ -53,7 +53,7 @@ print_mat(vector<vector<long long> > mat){
 }
 
 void
-dvide_conqure(long long size, vector<vector<long long> > a, vector<vector<long long> > b , vector<vector<long long> > &c){
+recusive(long long size, vector<vector<long long> > a, vector<vector<long long> > b , vector<vector<long long> > &c){
 
 	if(size == 2){
 		multiply(a,b,c);
@@ -64,9 +64,7 @@ dvide_conqure(long long size, vector<vector<long long> > a, vector<vector<long l
 	vector< vector<long long > > a11(new_size,inner),
 	a12(new_size,inner),a21(new_size,inner),a22(new_size,inner),
 	b11(new_size,inner),b12(new_size,inner),b21(new_size,inner),
-	b22(new_size,inner),p1(new_size,inner),p2(new_size,inner),
-	p3(new_size,inner),p4(new_size,inner),p5(new_size,inner),
-	p6(new_size,inner),p7(new_size,inner),temp_left(new_size,inner),
+	b22(new_size,inner),temp_left(new_size,inner),
 	temp_right(new_size,inner);
 
 	for(long long i = 0 ; i < new_size ; i++){
@@ -84,56 +82,24 @@ dvide_conqure(long long size, vector<vector<long long> > a, vector<vector<long l
 		}
 	}
 
-	 // p1 = a*(f-h)
-	 subtract(b12,b22,temp_right);
-	 dvide_conqure(new_size,a11,temp_right,p1);
-	 
-	 // p2 = (a+b)h
-	 add(a11,a12,temp_left);
-	 dvide_conqure(new_size,temp_left,b22,p2);
-	 
-	 // p3 = (c+d)e
-	 add(a21,a22,temp_left);
-	 dvide_conqure(new_size,temp_left,b11,p3);
-	 
-	 // p4 = d(g-e)
-	 subtract(b21,b11,temp_right);
-	 dvide_conqure(new_size,a22,temp_right,p4);
-
-	 // p5 = (a+d)(e+h)
-	 add(a11,a22,temp_left);
-	 add(b11,b22,temp_right);
-	 dvide_conqure(new_size,temp_left,temp_right,p5);
-
-	 // p6 = (b-d)(g+h)
-	 subtract(a12,a22,temp_left);
-	 add(b21,b22,temp_right);
-	 dvide_conqure(new_size,temp_left,temp_right,p6);
-	 
-	 // p7 = (a-c)(e+f)
-	 subtract(a11,a21,temp_left);
-	 add(b11,b12,temp_right);
-	 dvide_conqure(new_size,temp_left,temp_right,p7);
-
 	vector<vector<long long> > m1(new_size,inner),m2(new_size,inner),
 	m3(new_size,inner),m4(new_size,inner);
 
-	
-	// m1 = p5+p4-p2+p6
-	add(p5,p4,temp_left);
-	subtract(temp_left,p2,temp_right);
-	add(temp_right,p6,m1);
+	recusive(a11,b11,temp_left);
+	recusive(a12,b21,temp_right);
+	add(temp_right,temp_left,m1);
+		
+	recusive(a11,b12,temp_left);
+	recusive(a12,b22,temp_right);
+	add(temp_right,temp_left,m2);
 
-	// m2 = p1+p2
-	add(p1,p2,m2);
-	
-	//m3 = p3+p4
-	add(p3,p4,m3);
+	recusive(a21,b11,temp_left);
+	recusive(a22,b21,temp_right);
+	add(temp_right,temp_left,m3);
 
-	//m4 = p1+p5-p3-p7
-	add(p1,p5,temp_left);
-	subtract(temp_left,p3,temp_right);
-	subtract(temp_right,p7,m4);
+	recusive(a21,b12,temp_left);
+	recusive(a22,b22,temp_right);
+	add(temp_right,temp_left,m4);
 	 
 
 	for(long long i = 0 ; i < size/2 ; i++){
@@ -173,7 +139,7 @@ main(int argc , char *argv[]){
 		// calc time
 		gettimeofday(&start, NULL); //start checking time
 
-		dvide_conqure(n,mat,mat,res);
+		recusive(n,mat,mat,res);
 
 		gettimeofday(&stop, NULL); //start checking time
 		//  end calc time
